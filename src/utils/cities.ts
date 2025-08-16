@@ -1,4 +1,4 @@
-import { City, GradientTheme } from '../types';
+import type { City, GradientTheme } from '../types';
 
 export const CITIES: City[] = [
   {

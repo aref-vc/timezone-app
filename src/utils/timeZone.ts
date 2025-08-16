@@ -1,4 +1,5 @@
-import { City, TimeZoneData, MeetingTime } from '../types';
+import type { City, TimeZoneData, MeetingTime } from '../types';
+import { TIME_OF_DAY_HOURS } from '../constants';
 
 export const getCurrentTimeInTimeZone = (timeZone: string): Date => {
   return new Date(new Date().toLocaleString('en-US', { timeZone }));
@@ -19,9 +20,6 @@ export const formatTime = (date: Date, format: '12' | '24' = '24', showSeconds: 
 };
 
 export const getTimeZoneOffset = (timeZone: string): string => {
-  const now = new Date();
-  const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-  const targetTime = new Date(utc + (getTimeZoneOffsetInMinutes(timeZone) * 60000));
   const offset = getTimeZoneOffsetInMinutes(timeZone) / 60;
   
   const sign = offset >= 0 ? '+' : '-';
@@ -33,16 +31,23 @@ export const getTimeZoneOffset = (timeZone: string): string => {
 
 export const getTimeZoneOffsetInMinutes = (timeZone: string): number => {
   const now = new Date();
-  const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
   const targetTime = new Date(now.toLocaleString('en-US', { timeZone }));
   const localTime = new Date(now.toLocaleString('en-US'));
   
   return (targetTime.getTime() - localTime.getTime()) / (1000 * 60);
 };
 
+export const getTimeOfDay = (date: Date): 'morning' | 'day' | 'evening' | 'night' => {
+  const hour = date.getHours();
+  if (hour >= TIME_OF_DAY_HOURS.MORNING_START && hour < TIME_OF_DAY_HOURS.MORNING_END) return 'morning';
+  if (hour >= TIME_OF_DAY_HOURS.DAY_START && hour < TIME_OF_DAY_HOURS.DAY_END) return 'day';
+  if (hour >= TIME_OF_DAY_HOURS.EVENING_START && hour < TIME_OF_DAY_HOURS.EVENING_END) return 'evening';
+  return 'night';
+};
+
 export const isDaytime = (date: Date): boolean => {
   const hour = date.getHours();
-  return hour >= 6 && hour < 18;
+  return hour >= TIME_OF_DAY_HOURS.DAYTIME_START && hour < TIME_OF_DAY_HOURS.DAYTIME_END;
 };
 
 export const getTimeZoneData = (city: City, timeFormat: '12' | '24' = '24', showSeconds: boolean = false): TimeZoneData => {
@@ -50,13 +55,15 @@ export const getTimeZoneData = (city: City, timeFormat: '12' | '24' = '24', show
   const formattedTime = formatTime(currentTime, timeFormat, showSeconds);
   const offset = getTimeZoneOffset(city.timeZone);
   const isDaytimeNow = isDaytime(currentTime);
+  const timeOfDay = getTimeOfDay(currentTime);
 
   return {
     city,
     currentTime,
     formattedTime,
     offset,
-    isDaytime: isDaytimeNow
+    isDaytime: isDaytimeNow,
+    timeOfDay
   };
 };
 

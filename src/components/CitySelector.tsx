@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, MapPin, Globe } from 'lucide-react';
-import { CITIES, searchCities, getCityById } from '../utils';
-import { City } from '../types';
+import { CITIES, searchCities } from '../utils';
 
 interface CitySelectorProps {
   selectedCities: string[];

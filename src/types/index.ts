@@ -15,6 +15,7 @@ export interface TimeZoneData {
   formattedTime: string;
   offset: string;
   isDaytime: boolean;
+  timeOfDay: 'morning' | 'day' | 'evening' | 'night';
 }
 
 export interface MeetingTime {
@@ -29,7 +30,6 @@ export interface MeetingTime {
 
 export interface AppSettings {
   selectedCities: string[];
-  gradientTheme: GradientTheme;
   timeFormat: '12' | '24';
   showSeconds: boolean;
   autoUpdateInterval: number;

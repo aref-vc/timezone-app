@@ -1,8 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { X, Sun, Moon } from 'lucide-react';
-import { TimeZoneData } from '../types';
-import { getTimeOfDayEmoji } from '../utils';
+import type { TimeZoneData } from '../types';
 
 interface TimeZoneCardProps {
   timeZone: TimeZoneData;

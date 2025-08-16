@@ -1,16 +1,9 @@
-import { AppSettings } from '../types';
+import type { AppSettings } from '../types';
 
 const STORAGE_KEY = 'timezone-app-settings';
 
 export const defaultSettings: AppSettings = {
-  selectedCities: ['london', 'tokyo', 'new-york'],
-  gradientTheme: {
-    name: 'Sunset',
-    colors: {
-      start: '#ff6b6b',
-      end: '#4ecdc4'
-    }
-  },
+  selectedCities: ['london', 'tokyo'],
   timeFormat: '24',
   showSeconds: false,
   autoUpdateInterval: 1000
