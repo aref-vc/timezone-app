@@ -1,0 +1,490 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  #root {
+    min-height: 100vh;
+    position: relative;
+  }
+}
+
+@layer components {
+  .typewriter-font {
+    font-family: 'Courier Prime', 'Courier New', monospace;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+
+  .instrument-serif {
+    font-family: 'Instrument Serif', serif;
+    font-weight: 400;
+  }
+
+  .text-shadow-strong {
+    text-shadow: 
+      0 3px 6px rgba(0, 0, 0, 0.4),
+      0 6px 12px rgba(0, 0, 0, 0.3),
+      0 1px 3px rgba(0, 0, 0, 0.6),
+      0 0 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .text-shadow-subtle {
+    text-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.3),
+      0 4px 8px rgba(0, 0, 0, 0.2),
+      0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  .glass-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.05) 50%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+    backdrop-filter: blur(1px);
+  }
+
+  /* Timeline scroll bar styles */
+  .timeline-scrollbar {
+    position: relative;
+    width: 100%;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+  }
+
+  .timeline-dot {
+    width: 16px !important;
+    height: 16px !important;
+    border-radius: 50% !important;
+    background: #ff0000 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    box-shadow: 
+      0 0 20px rgba(255, 0, 0, 1),
+      0 0 40px rgba(255, 0, 0, 0.8),
+      inset 0 0 8px rgba(255, 255, 255, 0.8) !important;
+    border: 3px solid #ffffff !important;
+    position: absolute !important;
+    z-index: 10000 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .timeline-dot.active {
+    background: #ffffff !important;
+    transform: scale(1.8) !important;
+    box-shadow: 
+      0 0 20px rgba(255, 255, 255, 1),
+      0 0 30px rgba(255, 255, 255, 0.6),
+      0 0 40px rgba(255, 255, 255, 0.3),
+      inset 0 0 6px rgba(255, 255, 255, 0.5) !important;
+    border: 3px solid #ffffff !important;
+  }
+
+  .timeline-dot.passed {
+    background: rgba(255, 255, 255, 0.95) !important;
+    transform: scale(1.3) !important;
+    box-shadow: 
+      0 0 12px rgba(255, 255, 255, 0.8),
+      0 0 20px rgba(255, 255, 255, 0.4),
+      inset 0 0 4px rgba(255, 255, 255, 0.4) !important;
+    border: 2px solid rgba(255, 255, 255, 0.95) !important;
+  }
+
+  .timeline-dot:hover {
+    background: #ffffff !important;
+    transform: scale(1.5) !important;
+    box-shadow: 
+      0 0 16px rgba(255, 255, 255, 0.9),
+      0 0 24px rgba(255, 255, 255, 0.5),
+      inset 0 0 5px rgba(255, 255, 255, 0.4) !important;
+    border: 3px solid rgba(255, 255, 255, 1) !important;
+  }
+
+  .timeline-thumb {
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    cursor: grab;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 50;
+    transform: translateY(-50%);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+  }
+
+  .timeline-thumb:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.5);
+  }
+
+  .timeline-thumb:active {
+    cursor: grabbing;
+    transform: translateY(-50%) scale(1.05);
+  }
+
+  /* Gradient definitions for each timezone and time */
+  .gradient-london-morning {
+    background: 
+      radial-gradient(circle at 30% 70%, rgba(255, 154, 158, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(254, 207, 239, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #ff9a9e 0%, #fad0c4 25%, #fecfef 50%, #fad0c4 75%, #fecfef 100%);
+  }
+  
+  .gradient-london-day {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(255, 236, 210, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(252, 182, 159, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #ffecd2 0%, #fcb69f 25%, #ffecd2 50%, #fcb69f 75%, #ffecd2 100%);
+  }
+  
+  .gradient-london-evening {
+    background: 
+      radial-gradient(circle at 40% 60%, rgba(255, 107, 107, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 60% 40%, rgba(238, 90, 36, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #ff6b6b 0%, #ee5a24 25%, #ff6b6b 50%, #ee5a24 75%, #ff6b6b 100%);
+  }
+  
+  .gradient-london-night {
+    background: 
+      radial-gradient(circle at 25% 75%, rgba(44, 83, 100, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 75% 25%, rgba(32, 58, 67, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #2C5364 0%, #203A43 25%, #0F2027 50%, #203A43 75%, #2C5364 100%);
+  }
+
+  .gradient-tokyo-morning {
+    background: 
+      radial-gradient(circle at 30% 70%, rgba(168, 237, 234, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(254, 214, 227, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #a8edea 0%, #fed6e3 25%, #a8edea 50%, #fed6e3 75%, #a8edea 100%);
+  }
+  
+  .gradient-tokyo-day {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(210, 153, 194, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(254, 249, 215, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #d299c2 0%, #fef9d7 25%, #d299c2 50%, #fef9d7 75%, #d299c2 100%);
+  }
+  
+  .gradient-tokyo-evening {
+    background: 
+      radial-gradient(circle at 40% 60%, rgba(137, 247, 254, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 60% 40%, rgba(102, 166, 255, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #89f7fe 0%, #66a6ff 25%, #89f7fe 50%, #66a6ff 75%, #89f7fe 100%);
+  }
+  
+  .gradient-tokyo-night {
+    background: 
+      radial-gradient(circle at 25% 75%, rgba(19, 78, 94, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 75% 25%, rgba(113, 178, 128, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #134e5e 0%, #71b280 25%, #134e5e 50%, #71b280 75%, #134e5e 100%);
+  }
+
+  .gradient-newyork-morning {
+    background: 
+      radial-gradient(circle at 30% 70%, rgba(102, 126, 234, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(118, 75, 162, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #667eea 0%, #764ba2 25%, #667eea 50%, #764ba2 75%, #667eea 100%);
+  }
+  
+  .gradient-newyork-day {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(240, 147, 251, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(245, 87, 108, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #f093fb 0%, #f5576c 25%, #f093fb 50%, #f5576c 75%, #f093fb 100%);
+  }
+  
+  .gradient-newyork-evening {
+    background: 
+      radial-gradient(circle at 40% 60%, rgba(79, 172, 254, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 60% 40%, rgba(0, 242, 254, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #4facfe 0%, #00f2fe 25%, #4facfe 50%, #00f2fe 75%, #4facfe 100%);
+  }
+  
+  .gradient-newyork-night {
+    background: 
+      radial-gradient(circle at 25% 75%, rgba(67, 233, 123, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 75% 25%, rgba(56, 249, 215, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #43e97b 0%, #38f9d7 25%, #43e97b 50%, #38f9d7 75%, #43e97b 100%);
+  }
+
+  .gradient-default-morning {
+    background: 
+      radial-gradient(circle at 30% 70%, rgba(247, 112, 154, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(254, 225, 64, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #fa709a 0%, #fee140 25%, #fa709a 50%, #fee140 75%, #fa709a 100%);
+  }
+  
+  .gradient-default-day {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(168, 237, 234, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(254, 214, 227, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #a8edea 0%, #fed6e3 25%, #a8edea 50%, #fed6e3 75%, #a8edea 100%);
+  }
+  
+  .gradient-default-evening {
+    background: 
+      radial-gradient(circle at 40% 60%, rgba(210, 153, 194, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 60% 40%, rgba(254, 249, 215, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #d299c2 0%, #fef9d7 25%, #d299c2 50%, #fef9d7 75%, #d299c2 100%);
+  }
+  
+  .gradient-default-night {
+    background: 
+      radial-gradient(circle at 25% 75%, rgba(102, 126, 234, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 75% 25%, rgba(118, 75, 162, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #667eea 0%, #764ba2 25%, #667eea 50%, #764ba2 75%, #667eea 100%);
+  }
+
+  /* Additional city gradients */
+  .gradient-losangeles-morning {
+    background: 
+      radial-gradient(circle at 30% 70%, rgba(255, 183, 77, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(255, 138, 101, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #ffb74d 0%, #ff8a65 25%, #ffb74d 50%, #ff8a65 75%, #ffb74d 100%);
+  }
+  
+  .gradient-losangeles-day {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(255, 224, 130, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(255, 167, 38, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #ffe082 0%, #ffa726 25%, #ffe082 50%, #ffa726 75%, #ffe082 100%);
+  }
+  
+  .gradient-losangeles-evening {
+    background: 
+      radial-gradient(circle at 40% 60%, rgba(255, 112, 67, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 60% 40%, rgba(244, 67, 54, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #ff7043 0%, #f44336 25%, #ff7043 50%, #f44336 75%, #ff7043 100%);
+  }
+  
+  .gradient-losangeles-night {
+    background: 
+      radial-gradient(circle at 25% 75%, rgba(63, 81, 181, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 75% 25%, rgba(48, 63, 159, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #3f51b5 0%, #303f9f 25%, #3f51b5 50%, #303f9f 75%, #3f51b5 100%);
+  }
+
+  .gradient-sydney-morning {
+    background: 
+      radial-gradient(circle at 30% 70%, rgba(129, 212, 250, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(100, 181, 246, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #81d4fa 0%, #64b5f6 25%, #81d4fa 50%, #64b5f6 75%, #81d4fa 100%);
+  }
+  
+  .gradient-sydney-day {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(187, 222, 251, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(144, 202, 249, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #bbdefb 0%, #90caf9 25%, #bbdefb 50%, #90caf9 75%, #bbdefb 100%);
+  }
+  
+  .gradient-sydney-evening {
+    background: 
+      radial-gradient(circle at 40% 60%, rgba(121, 134, 203, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 60% 40%, rgba(159, 168, 218, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #7986cb 0%, #9fa8da 25%, #7986cb 50%, #9fa8da 75%, #7986cb 100%);
+  }
+  
+  .gradient-sydney-night {
+    background: 
+      radial-gradient(circle at 25% 75%, rgba(57, 73, 171, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 75% 25%, rgba(26, 35, 126, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #3949ab 0%, #1a237e 25%, #3949ab 50%, #1a237e 75%, #3949ab 100%);
+  }
+
+  .gradient-dubai-morning {
+    background: 
+      radial-gradient(circle at 30% 70%, rgba(255, 183, 77, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(255, 152, 0, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #ffb74d 0%, #ff9800 25%, #ffb74d 50%, #ff9800 75%, #ffb74d 100%);
+  }
+  
+  .gradient-dubai-day {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(255, 224, 178, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(255, 193, 7, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #ffe0b2 0%, #ffc107 25%, #ffe0b2 50%, #ffc107 75%, #ffe0b2 100%);
+  }
+  
+  .gradient-dubai-evening {
+    background: 
+      radial-gradient(circle at 40% 60%, rgba(255, 111, 97, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 60% 40%, rgba(230, 74, 25, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #ff6f61 0%, #e64a19 25%, #ff6f61 50%, #e64a19 75%, #ff6f61 100%);
+  }
+  
+  .gradient-dubai-night {
+    background: 
+      radial-gradient(circle at 25% 75%, rgba(38, 50, 56, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 75% 25%, rgba(55, 71, 79, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #263238 0%, #37474f 25%, #263238 50%, #37474f 75%, #263238 100%);
+  }
+
+  .gradient-paris-morning {
+    background: 
+      radial-gradient(circle at 30% 70%, rgba(240, 98, 146, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(233, 30, 99, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #f06292 0%, #e91e63 25%, #f06292 50%, #e91e63 75%, #f06292 100%);
+  }
+  
+  .gradient-paris-day {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(248, 187, 208, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(244, 143, 177, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #f8bbd0 0%, #f48fb1 25%, #f8bbd0 50%, #f48fb1 75%, #f8bbd0 100%);
+  }
+  
+  .gradient-paris-evening {
+    background: 
+      radial-gradient(circle at 40% 60%, rgba(171, 71, 188, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 60% 40%, rgba(142, 36, 170, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #ab47bc 0%, #8e24aa 25%, #ab47bc 50%, #8e24aa 75%, #ab47bc 100%);
+  }
+  
+  .gradient-paris-night {
+    background: 
+      radial-gradient(circle at 25% 75%, rgba(74, 20, 140, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 75% 25%, rgba(49, 27, 146, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #4a148c 0%, #311b92 25%, #4a148c 50%, #311b92 75%, #4a148c 100%);
+  }
+
+  .gradient-singapore-morning {
+    background: 
+      radial-gradient(circle at 30% 70%, rgba(102, 187, 106, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(76, 175, 80, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #66bb6a 0%, #4caf50 25%, #66bb6a 50%, #4caf50 75%, #66bb6a 100%);
+  }
+  
+  .gradient-singapore-day {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(165, 214, 167, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(129, 199, 132, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #a5d6a7 0%, #81c784 25%, #a5d6a7 50%, #81c784 75%, #a5d6a7 100%);
+  }
+  
+  .gradient-singapore-evening {
+    background: 
+      radial-gradient(circle at 40% 60%, rgba(56, 142, 60, 0.8) 0%, transparent 50%),
+      radial-gradient(circle at 60% 40%, rgba(27, 94, 32, 0.6) 0%, transparent 50%),
+      linear-gradient(135deg, #388e3c 0%, #1b5e20 25%, #388e3c 50%, #1b5e20 75%, #388e3c 100%);
+  }
+  
+  .gradient-singapore-night {
+    background: 
+      radial-gradient(circle at 25% 75%, rgba(46, 125, 50, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 75% 25%, rgba(67, 160, 71, 0.7) 0%, transparent 40%),
+      linear-gradient(135deg, #2e7d32 0%, #43a047 25%, #2e7d32 50%, #43a047 75%, #2e7d32 100%);
+  }
+
+  /* Blurred transition overlay */
+  .transition-blur-left {
+    position: absolute;
+    top: -50px;
+    bottom: -50px;
+    left: -150px;
+    width: 300px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.03) 20%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.03) 80%,
+      transparent 100%
+    );
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 15;
+  }
+
+  .transition-blur-right {
+    position: absolute;
+    top: -50px;
+    bottom: -50px;
+    right: -150px;
+    width: 300px;
+    background: linear-gradient(
+      270deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.03) 20%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.03) 80%,
+      transparent 100%
+    );
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 15;
+  }
+
+  /* Vertical blur transitions */
+  .transition-blur-top {
+    position: absolute;
+    left: -50px;
+    right: -50px;
+    top: -150px;
+    height: 300px;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.03) 20%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.03) 80%,
+      transparent 100%
+    );
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 15;
+  }
+
+  .transition-blur-bottom {
+    position: absolute;
+    left: -50px;
+    right: -50px;
+    bottom: -150px;
+    height: 300px;
+    background: linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.03) 20%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.03) 80%,
+      transparent 100%
+    );
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 15;
+  }
+}
