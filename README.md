@@ -2,6 +2,22 @@
 
 An elegant, immersive multi-timezone display application with interactive timeline navigation and beautiful gradient backgrounds. Built with React, TypeScript, and modern web technologies.
 
+## 📱 Preview
+
+![TimeZone App Screenshot](docs/images/app-screenshot.png)
+
+*Beautiful gradient backgrounds change dynamically based on time of day across different cities*
+
+### What you see in the screenshot:
+- **5 Cities Displayed**: London, Tokyo, New York, Sydney, Los Angeles
+- **Interactive Timeline**: 24-hour dots at the top for time navigation
+- **Dynamic Gradients**: Each city has unique colors based on local time
+- **Day/Night Indicators**: Sun and moon icons showing local time of day
+- **Real-time Updates**: Live time display for all selected timezones
+- **Immersive Design**: Full-screen gradient sections with glassmorphism effects
+
+## 🏷️ Status
+
 ![Time Zone App Demo](https://img.shields.io/badge/Status-Live-brightgreen)
 ![React](https://img.shields.io/badge/React-19.1.0-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue)
